@@ -55,6 +55,13 @@ public class WebSecurityConfig {
         // CSRF 설정
         http.csrf((csrf) -> csrf.disable());
 
+        // h2 콘솔 접근용 설정
+        http.headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
+        http.authorizeHttpRequests(auth -> auth
+                // H2 콘솔 전체 허용
+                .requestMatchers(PathRequest.toH2Console()).permitAll()
+        );
+
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement((sessionManagement) ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
